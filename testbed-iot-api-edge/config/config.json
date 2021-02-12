@@ -1,0 +1,5 @@
+{
+    "endPoint":"http://192.168.0.8:1337/receive",
+    "deviceFile": "deviceconfig.json",
+    "port": "1338"
+}

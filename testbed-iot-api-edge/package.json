@@ -1,0 +1,24 @@
+{
+  "name": "BockChainApiNode",
+  "version": "0.1.0",
+  "description": "IoT Blockchain Lib to Nodes",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "start-server": "node app.js"
+  },
+  "author": "Celio Marcio",
+  "license": "GPL",
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  },
+  "dependencies": {
+    "ethereumjs-util": "^5.2.0",
+    "express": "4.16.3",
+    "merkle-tree-solidity": "^1.0.8",
+    "request": "2.88.0",
+    "request-promise-native": "^1.0.8",
+    "web3": "0.20.6"
+  }
+}

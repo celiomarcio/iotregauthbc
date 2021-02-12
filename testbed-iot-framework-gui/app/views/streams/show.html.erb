@@ -1,0 +1,148 @@
+<% def_location =
+  if @stream.location.nil? then " "
+  elsif @stream.location.is_a?(String) then
+        @stream.location
+  elsif @stream.location.is_a?(Array) then
+        @stream.location[0].to_s+","+@stream.location[1].to_s
+  else
+        @stream.location['lat'].to_s+","+@stream.location['lon'].to_s
+  end
+%>
+
+<div class="row title-row">
+  <div class="col-lg-8">
+		<h2 class="text-left"><%= @stream.name %> <a href="/users/<%= @stream.user_id %>" > <small><%= @stream.user_id %> </small></a></h2>
+		<%= render 'follow_form' if signed_in? %>
+	</div>
+
+  <div class="col-lg-2" style="margin-top: 25px;">
+
+    <%= render 'layouts/streams/star_rating' , :stream => @stream %>
+
+      <!-- <p><small>Created: <%#= @stream.creation_date %></small></p> -->
+  </div>
+
+  <div class="col-lg-2 text-right" style="margin-top: 25px;">
+    <p>
+      <% if @stream.private == true %>
+        <span class="label label-danger">Private</span>
+      <% else %>
+        <span class="label label-success">Public</span>
+      <% end %>
+
+      <% if @stream.active == true %>
+        <span class="label label-success">Active</span>
+      <% else %>
+        <span class="label label-danger">Inactive</span>
+      <% end %>
+    </p>
+  </div>
+</div>
+
+<!-- <div class="row">
+  <div class="col-lg-8">
+    <h4>Type: <%= @stream.type %></h4>
+    <h4>Unit: <%= @stream.unit %></h4>
+    <h4>Ranking: <%= @stream.user_ranking %></h4>
+  </div>
+  <div class="col-lg-4">
+    <h4>Location</h4>
+  </div>
+</div> -->
+
+<div class="row">
+  <div class="col-lg-8"> <!-- Left side -->
+    <div class="stream-graph graph-canvas" id="graph-canvas"></div>
+
+    <%= form_tag url_for(controller: "streams", action: "fetch_prediction"), remote: true, method: 'get' do %>
+    <%= submit_tag "Fetch Prediction", class: "btn btn-primary", id: "prediction-btn"%>
+      <span>
+         Prediction history size:
+        <%= select_tag :in, options_for_select([10, 25, 50, 100, 150, 200, 300, 400, 500]) %>
+      </span>
+
+      <span>
+         Prediction output size:
+        <%= select_tag :out, options_for_select([1, 10, 25, 50, 100, 150, 200, 300, 400, 500]) %>
+      </span>
+    <%end%>
+
+    <%= form_tag url_for(controller: "streams", action: "fetch_semantics"), remote: true, method: 'get' do %>
+    <%= submit_tag "Export", class: "btn btn-primary", id: "semantics-btn"%>
+	<span>
+         Output format:
+        <%= select_tag :type, options_for_select(["ns3", "xml", "json-ld"]) %>
+      </span>
+    <%end%>
+
+      <div id="prediction-description" class="pull-right">
+        <span class="label prediction-80">80% Confidence interval</span>
+        <span class="label prediction-95">95% Confidence interval</span>
+      </div>
+        <div class="pull-right">Live update:
+          <div class="make-switch switch-mini" id="live-update-btn">
+            <input id="live-update-checkbox" type="checkbox">
+          </div>
+        </div>
+      <div><small>
+        Last update: <%= @stream.last_updated %>
+        History: <%= @count_history %>
+        Accuracy: <%= @stream.accuracy %>
+        Min Value: <%= @stream.min_val %>
+        Max Value: <%= @stream.max_val %>
+        </small>
+
+      </div>
+
+    <h4>Description: </h4>
+    <div class="stream-description well"><%= @stream.description %></div>
+    <h4>Tags: </h4>
+    <div class="stream-tags well">
+      <% tagslist = @stream.tags.split(/,/) %>
+      <% for tag in tagslist %>
+        <span class="label label-default <%= tag.downcase %>"><%= tag %></span>
+      <% end %>
+    </div>
+    <%= render 'triggers' if signed_in? and @user.username.downcase == @stream.user_id %>
+    <% if not @user.nil? and @user.username.downcase == @stream.user_id %>
+      <% if @stream.polling == true %>
+        <h4>Parser: </h4>
+        <div class="stream-description well">
+          Path : <%= @stream.parser %> <br>
+          Data-Type : <%= @stream.data_type %> <br>
+          URI : <%= @stream.uri %> <br>
+          Polling Frequency : <%= @stream.polling_freq %> (sec) <br>
+        </div>
+      <% end %>
+      <%= link_to 'Edit', edit_stream_path(@stream), class: "glyphicon glyphicon-pencil btn btn-primary" %>
+      <%= link_to 'Delete', @stream, confirm: 'Are you sure?', method: :delete, class: "glyphicon glyphicon-remove btn btn-danger" %>
+    <% end %>
+  </div>
+  <div class="col-md-4"> <!-- Right side -->
+    <div class="row" style="height:300px;">
+    <div id="map-canvas">
+    </div>
+    </div>
+      <div id="location" style="display: none;" value="<%= def_location %>"></div>
+      <% if not @user.nil? and @user.username.downcase == @stream.user_id and @stream.polling == true %>
+        <div class="user-alerts panel panel-default">
+        <div class="panel-heading">Polling System Log (100 latest messages)</div>
+        <ul class="list alerts-list">
+        <% @polling_history.each do |message| %>
+            <li class="list-group-item">
+              <%= message["polling"]["message"] %> at
+              <%= message["polling"]["timestamp"]%>
+            </li>
+         <% end %>
+
+      </ul>
+    </div>
+    <% end %>
+  </div>
+
+</div>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwrjTHAuOL2MG_bEC--E-hYSqn8GC2R8c&sensor=false" ></script>
+
+
+

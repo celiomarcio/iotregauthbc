@@ -1,0 +1,31 @@
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwrjTHAuOL2MG_bEC--E-hYSqn8GC2R8c&sensor=false" ></script>
+
+<% if @stream.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-danger">
+      The form contains <%= pluralize(@stream.errors.count, "error") %>.
+    </div>
+
+    <ul>
+      <% @stream.errors.full_messages.each do |msg| %>
+        <li>* <%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= render "form_header", f: f %>
+
+<div class="steps">
+  <% 3.times do |i| %>
+   <%= render "form_step#{i+1}", f: f %>
+  <% end %>
+</div>
+
+<%= render "form_hidden_fields", f: f %>
+
+<footer class="center">
+  <%= render "form_buttons", f: f %>
+</footer>
+
+<br/>

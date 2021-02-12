@@ -1,0 +1,40 @@
+<!--
+<footer class="footer">
+  <small>
+    <a href="#">Sensor Cloud</a>
+    by ProjectCS2013
+  </small>
+  <nav>
+    <ul>
+      <li><%#= link_to "About",   about_path %></li>
+      <li><%#= link_to "Contact", contact_path %></li>
+    </ul>
+  </nav>
+</footer>
+-->
+<footer class="footer">
+  <div class="margin row">
+    <ul class="footer-links col-md-4">
+      <li><%= link_to "Terms", terms_path %></li>
+      <li><%= link_to "Privacy", privacy_path %></li>
+      <li><%= link_to "Security", security_path %></li>
+      <li><%= link_to "API", api_path %></li>
+    </ul>
+
+    <figure class="col-md-4">
+      <!--
+      <%= link_to image_tag("logos/ericsson-logo.gif", alt: "Brand Logo"), 'https://labs.ericsson.com/' %>
+      <figcaption class="footer-logo-caption">Sponsored by Ericsson Research, 2013</figcaption
+      -->
+      <figcaption>Uppsala University, 2013</figcaption>
+    </figure>
+
+    <ul class="footer-links col-md-4">
+      <li><%= link_to "FAQ", faq_path %></li>
+      <li><%= link_to "Manual", manual_path %></li>
+      <li><%= link_to "Contact", new_contact_path %></li>
+      <li><%= link_to "About", about_path %></li>
+    </ul>
+    <div class="clearfix"></div>
+  </div>
+</footer>

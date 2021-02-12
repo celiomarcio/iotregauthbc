@@ -1,0 +1,82 @@
+version: "3.3"
+services:
+  apigateway:
+    build:
+      context: ./testbed-iot-bloclchain-api-gateway/
+      dockerfile: Dockerfile   
+    ports:
+      - "1337:1337"   
+    depends_on:
+      - scframework
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1000M
+    networks:
+      appnet:
+        ipv4_address: 172.28.0.200
+      fognet:
+        ipv4_address: 172.29.0.200
+  
+  remotenode:
+    build:
+      context: ./testbed-iot-api-edge
+      dockerfile: Dockerfile
+    depends_on:
+      - apigateway
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 200M
+    #volumes:
+     # - ./iot-blockchain-management-client/config:/iot-blockchain-management-client/config:rw
+    networks:
+      fognet:
+       # ipv4_address: 172.29.0.100
+      appnet:
+  
+  scframework:
+    build:
+      context: ./testbed-iot-framework-engine/
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      appnet:
+        ipv4_address: 172.28.0.110
+
+  scweb:
+    build:
+      context: ./testbed-iot-framework-gui/
+      dockerfile: Dockerfile
+    depends_on:
+        - scframework
+    ports:
+      - "8080:3000" 
+    networks:
+      appnet:
+        ipv4_address: 172.28.0.100
+
+networks:
+  chainnet:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.25.0.0/24
+  fognet:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.29.0.0/24
+  edgenet:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.27.0.0/24
+  appnet:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.28.0.0/24

@@ -1,0 +1,14 @@
+<%= form_for(:search, url: searches_path, :html => { :role => 'form',  :id =>'search-bar'}) do |f| %>
+    <div class="input-group">
+       
+        <%= f.text_field :query, value: @query, class: "form-control" %> 
+    <span class="input-group-btn">
+      <div id="filter-btn" class="btn btn-default"><i class="caret"></i></div>
+      <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+    </span>
+   
+  </div>
+  <div class="row col-md-12 form-inline" id="filter" hidden="true">
+    <%= render 'filter', f: f %>    
+  </div>
+<% end %>

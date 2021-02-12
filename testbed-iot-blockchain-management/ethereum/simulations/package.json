@@ -1,0 +1,24 @@
+{
+  "name": "simulations",
+  "version": "0.1.0",
+  "description": "Cert API Ethereum Gateway",
+  "main": "platformIOT.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon platformIOT.js",
+    "start-server": "node platformIOT.js"
+  },
+  "author": "Celio Marcio",
+  "license": "GPL",
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  },
+  "dependencies": {
+    "ethereumjs-util": "^5.2.0",
+    "express": "4.16.3",
+    "merkle-tree-solidity": "^1.0.8",
+    "request": "2.88.0",
+    "request-promise-native": "^1.0.8",
+    "web3": "0.20.6"
+  }
+}
